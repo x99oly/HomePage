@@ -157,7 +157,19 @@ function changePosition(event, nome, descricao) {
 // Atribui a var dinâmicas do html valores
 function setExternalLinks(db) {
     let gitLinks = document.querySelectorAll('.link-github');
-    let avatarImages = document.querySelectorAll('.avatar-img')
+    let avatarImages = document.querySelectorAll('.avatar-img');
+
+    let gitMain = document.querySelector('.git-about-me');
+    gitMain.innerHTML = `
+        <span class="git-name">Olá, me chamo ${db.name},</span>
+            ${db.bio} <br>
+            <strong>Localização: </strong><span>${db.location}</span> <br>                  
+<strong>site: </strong><a class="git-site hover" href="${db.blog}" target="_blank">${db.blog}</a>
+            <span class="git-followers" href="#" > <br><br>
+             <img class="logo" style="background-color: var(--neutro-1);" src="assets/images/logos/pessoas.png" alt="">
+                            00
+             </span>
+    `;
 
     gitLinks.forEach(link => {
         link.addEventListener('click', function(event) {
@@ -225,6 +237,7 @@ function printMainTechs() {
     });
 
 }
+//preenche o objeto lenguages com links para aba linguagens de cada repositório
 function fillLanguagesLinks(obj) {
     languages[obj.name.toLowerCase()] = `https://api.github.com/repos/x99oly/${obj.name.toLowerCase()}/languages`
 }
@@ -254,9 +267,7 @@ async function populateLanguages(obj) {
 
 async function callApi(address) {
     try {
-        const response = await fetch(address, {
-           
-        });
+        const response = await fetch(address);
         const data = await response.json();
         return data;
     } catch (error) {
