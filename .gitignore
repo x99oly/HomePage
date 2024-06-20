@@ -11,6 +11,7 @@ build/
 # Arquivos de ambiente
 .env
 home.html
+config.json
 
 # Arquivos de dependências de front-end
 bower_components/

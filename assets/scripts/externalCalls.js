@@ -2,6 +2,7 @@
 const objects = [];
 let vat = '0%';
 // TOKEN GIT HUB X99OLY --- Var de ambiente
+let token = "";
 // novos
 const apiGitHub = "https://api.github.com/users/";
 const apiGitHubMe = "https://api.github.com/users/x99oly";
@@ -54,8 +55,8 @@ function generateLanguageIcons(obj) {
 
     return Object.keys(languages).map(language => {
         let l = handleLanguageFormat(language.toLowerCase());
-        
-        if(!mainTech.includes(l)){
+
+        if (!mainTech.includes(l)) {
             l = ""
         }
         return `<li>
@@ -178,9 +179,23 @@ async function populateLanguages(obj) {
 
 // Funções assíncronas retornam promessas de dado, 'await' funciona como um 'if(dado){prossiga} / espera o retorno pra atribuir o dado
 
+async function fetchToken() {
+    try {
+        const response = await fetch('config.json');
+        const data = await response.json();
+        return data.gitToken;
+    } catch (error){
+        console.log('Não foi possível acessar i.json', error);
+    }
+}
+
 async function callApi(address) {
     try {
-        const response = await fetch(address);
+        const response = await fetch(address, {
+            headers: {
+                'Authorization': `token ${token}`,
+            }
+        });
         const data = await response.json();
         return data;
     } catch (error) {
@@ -192,6 +207,7 @@ async function callApi(address) {
 // CHAMADAS DE MÉTODOS AO CARREGAR A PÁGINA
 
 document.addEventListener("DOMContentLoaded", async function () {
+    token = await fetchToken();
     const gitData = await callApi(apiGitHubMe);
     const gitDataRepos = await callApi(`${apiGitHubMe}/repos`);
 
@@ -205,8 +221,8 @@ document.addEventListener("DOMContentLoaded", async function () {
             await populateLanguages(o);
             buildCards(o);
         }
-        
-        printCards();        
+
+        printCards();
     }
 });
 
