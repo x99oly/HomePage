@@ -36,7 +36,7 @@ function buildCards(obj) {
                                         style="width: 15%; height: auto; border-radius: 50%;" alt=""></li>
                             </ul>
                             <p style="position: absolute; bottom: -100%; right: 40%;" class="hover">
-                                <span class="btn-d" onclick="goToPage('/dbsitorio.html')" style="width: 1000% !important; font-weight: 400;">
+                                <span class="btn-d" onclick="goToPage('../html/repositorio.html')" style="width: 1000% !important; font-weight: 400;">
                                     Saiba mais
                                 </span>
                             </p>
@@ -191,11 +191,7 @@ async function fetchToken() {
 
 async function callApi(address) {
     try {
-        const response = await fetch(address, {
-            headers: {
-                'Authorization': `token ${token}`,
-            }
-        });
+        const response = await fetch(address);
         const data = await response.json();
         return data;
     } catch (error) {
@@ -207,8 +203,8 @@ async function callApi(address) {
 // CHAMADAS DE MÉTODOS AO CARREGAR A PÁGINA
 
 document.addEventListener("DOMContentLoaded", async function () {
-    token = await fetchToken();
-    const gitData = await callApi(apiGitHubMe);
+   token = await fetchToken();
+   const gitData = await callApi(apiGitHubMe);
     const gitDataRepos = await callApi(`${apiGitHubMe}/repos`);
 
     if (gitData) {
@@ -231,3 +227,6 @@ document.addEventListener("DOMContentLoaded", async function () {
 
 window.addEventListener("resize", function () {
 });
+
+fetchData()
+

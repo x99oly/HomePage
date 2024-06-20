@@ -18,12 +18,6 @@ function returnPagesID(){
     //alert(pagesID); main,projetos,contato,blog
 }
 
-
-
-
-
-
-
 function goToPage(adress) {
     window.location.href = adress;
 }
