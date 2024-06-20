@@ -2,7 +2,6 @@
 const objects = [];
 let vat = '0%';
 // TOKEN GIT HUB X99OLY --- Var de ambiente
-let token = "";
 // novos
 const apiGitHub = "https://api.github.com/users/";
 const apiGitHubMe = "https://api.github.com/users/x99oly";
@@ -12,41 +11,82 @@ const mainTech = ["html5", "css3", "csharp", "nodejs", "javascript"]
 const usedLanguages = {}; //linguagens que usei nos projetos
 const languages = {}; // Links dos repostorios/languages
 
+let gitAvatar = "";
 
 function buildCards(obj) {
+
+    function truncateText(text, maxLength) {
+        if (text.length > maxLength) {
+            return text.slice(0, maxLength) + '...';
+        }
+        return text;
+    }
+
+    let truncatedTitle = truncateText(obj.name, 20);
+    let truncatedDescription = truncateText(obj.description || '', 120);
+
     let cardHTML = `
         <div style="display: flex; justify-content: center;">
-            <a class="absolute-a" style="position: relative;" href="#" onclick="changePosition(event)">
-                <div class="card pointer">
-                    <div class="card-children pointer" style="top: -100%;">
-                        <img src="assets/images/rosequartz.jpg" class="card-img" alt="">
-                        <div class="card-info">
-                            <ul class="card-icons" style="justify-content: flex-start !important; gap: 5px;">
-                                ${generateLanguageIcons(obj)}
-                            </ul>
-                            <h4>${obj.name}</h4>
-                            <p class="card-description">
-                                ${obj.description || ''}
-                            </p>
-                            <ul class="card-collaborators" style="display: flex; flex-direction: column;">
-                                <li>
-                                    <h6 style="color: var(--main);">Colaboradores</h6>
-                                </li>
-                                <li><img src="assets/images/me-perfil.jpg" class="collaborator-img"
-                                        style="width: 15%; height: auto; border-radius: 50%;" alt=""></li>
-                            </ul>
-                            <p style="position: absolute; bottom: -100%; right: 40%;" class="hover">
-                                <span class="btn-d" onclick="goToPage('../html/repositorio.html')" style="width: 1000% !important; font-weight: 400;">
-                                    Saiba mais
-                                </span>
-                            </p>
-                        </div>
+    <a class="absolute-a" style="position: relative;" href="#" onclick="changePosition(event)">
+        <div class="card pointer">
+            <div class="card-children pointer" style="top: -100%;">
+                <img src="assets/images/rosequartz.jpg" class="card-img" alt="">
+                <div class="card-info">
+                    <ul class="card-icons" style="justify-content: flex-start !important; gap: 5px;">
+                        ${generateLanguageIcons(obj)}
+                    </ul>
+                    <h4>${truncatedTitle}</h4>
+                    <p class="card-description">
+                        ${truncatedDescription}
+                    </p>
+                    <ul class="card-collaborators" style="display: flex; flex-direction: column;">
+                        <li style="gap: 0px !important;">
+                            <h6 style="color: var(--main);">Colaboradores</h6>
+                        </li>
+                        <li>
+                            <img src="${gitAvatar}" class="owner-img"
+                                style="width: 15%; height: auto; border-radius: 50%; margin-top: -5%;"
+                                alt="">
+                        </li>
+                    </ul>
+
+                    <div style="display: flex; flex-direction: row; align-items: center; gap: 20px">
+                        <p>
+                            <img class="logo"
+                                style="max-width: 20px; background-color: var(--neutro-1); border-radius: 50%;"
+                                src="assets/images/logos/repositorio-logo.png" alt="">
+                            ${obj.forks_count}
+                        </p>
+                        <p>
+                            <img class="logo"
+                                style="max-width: 20px; background-color: var(--neutro-1); border-radius: 50%;"
+                                src="assets/images/logos/hollywood-star.png" alt="">
+                            ${obj.stargazers_count}
+                        </p>
                     </div>
+
+                    <p><strong>Data de Criação:</strong> ${new Date(obj.created_at).toLocaleDateString()}</p>
+
+                    <p style="position: absolute; bottom: -100%; right: 70%;" class="hover">
+                        <span class="btn-d" onclick="goToPage('../html/repositorio.html')"
+                            style="width: 1000% !important; font-weight: 400;">
+                            Saiba mais
+                        </span>
+                    </p>
+                    <p style="position: absolute; bottom: -100%; right: 25%;" class="hover">
+                        <span class="btn-d" onclick="goToPage('${obj.html_url}')"
+                            style="width: 1000% !important; font-weight: 400;">
+                            On Github
+                        </span>
+                    </p>
                 </div>
-            </a>
+            </div>
         </div>
+    </a>
+</div>
+
     `;
-    objects.push(cardHTML);
+    objects.push(cardHTML); 
 }
 
 function generateLanguageIcons(obj) {
@@ -63,6 +103,10 @@ function generateLanguageIcons(obj) {
                     <i class="devicon-${l}-plain colored" style="font-size: 20px;"></i>
                 </li>`;
     }).join('');
+}
+
+function goToPage(address) {
+    window.open(address, '_blank');
 }
 
 function printCards() {
@@ -110,12 +154,16 @@ function setExternalLinks(db) {
     let gitLinks = document.querySelectorAll('.link-github');
     let avatarImages = document.querySelectorAll('.avatar-img')
 
-    gitLinks.forEach(o => {
-        o.href = db.html_url
-    })
+    gitLinks.forEach(link => {
+        link.addEventListener('click', function(event) {
+            event.preventDefault();
+            goToPage(db.html_url); 
+        });
+    });
+
 
     avatarImages.forEach(o => {
-        o.src = db.avatar_url;
+        o.src = gitAvatar;
     })
 }
 function printMainTechs() {
@@ -188,6 +236,7 @@ async function fetchToken() {
     }
 }
 
+
 async function callApi(address) {
     try {
         const response = await fetch(address);
@@ -204,6 +253,8 @@ async function callApi(address) {
 document.addEventListener("DOMContentLoaded", async function () {
     token = await fetchToken();
     const gitData = await callApi(apiGitHubMe);
+    gitAvatar = gitData.avatar_url
+    console.log(gitAvatar)
     const gitDataRepos = await callApi(`${apiGitHubMe}/repos`);
 
     printMainTechs() // Printa as tecnologias que domina (#Contatos)
@@ -216,7 +267,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         for (let o of gitDataRepos) {
             fillLanguagesLinks(o);
             await populateLanguages(o);
-            buildCards(o);
+            buildCards(o, gitData);
         }
 
         printCards();

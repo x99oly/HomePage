@@ -18,10 +18,6 @@ function returnPagesID(){
     //alert(pagesID); main,projetos,contato,blog
 }
 
-function goToPage(adress) {
-    window.location.href = adress;
-}
-
 function page1MobileGridLayout() {
     const content = document.getElementById('content-page1');
     content.style.gridTemplateColumns = returnTrueForMobileWidth() ? 'repeat(1, 100%)' : 'repeat(2, 50%)';
