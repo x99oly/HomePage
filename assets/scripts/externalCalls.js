@@ -184,7 +184,7 @@ async function fetchToken() {
         const response = await fetch('config.json');
         const data = await response.json();
         return data.gitToken;
-    } catch (error){
+    } catch (error) {
         console.log('Não foi possível acessar i.json', error);
     }
 }
@@ -203,8 +203,8 @@ async function callApi(address) {
 // CHAMADAS DE MÉTODOS AO CARREGAR A PÁGINA
 
 document.addEventListener("DOMContentLoaded", async function () {
-   token = await fetchToken();
-   const gitData = await callApi(apiGitHubMe);
+    token = await fetchToken();
+    const gitData = await callApi(apiGitHubMe);
     const gitDataRepos = await callApi(`${apiGitHubMe}/repos`);
 
     if (gitData) {
@@ -228,5 +228,4 @@ document.addEventListener("DOMContentLoaded", async function () {
 window.addEventListener("resize", function () {
 });
 
-fetchData()
 
