@@ -13,6 +13,26 @@ const languages = {}; // Links dos repostorios/languages
 
 let gitAvatar = "";
 
+function setAboutProject(event, nome, descricao) {
+    event.preventDefault();
+    
+    let titulo = document.querySelector('.git-description h4');
+    let description = document.querySelector('.git-description p');
+
+    titulo.textContent = nome;
+    description.textContent = descricao || '';
+}
+
+function changePosition(event, nome, descricao) {
+    event.preventDefault();
+    const cardChildren = event.currentTarget.querySelector('.card-children');
+    cardChildren.style.top = cardChildren.style.top === '0%' ? '-100%' : '0%';
+    cardChildren.classList.add('blockChangePosition');
+
+    setAboutProject(event, nome, descricao);
+    console.log("deu algo")
+}
+
 function buildCards(obj) {
 
     function truncateText(text, maxLength) {
@@ -26,12 +46,12 @@ function buildCards(obj) {
     let truncatedDescription = truncateText(obj.description || '', 120);
 
     let cardHTML = `
-        <div style="display: flex; justify-content: center;">
-    <a class="absolute-a" style="position: relative;" href="#" onclick="changePosition(event)">
-        <div class="card pointer">
-            <div class="card-children pointer" style="top: -100%;">
-                <img src="assets/images/rosequartz.jpg" class="card-img" alt="">
-                <div class="card-info">
+        <div style="display: flex; justify-content: center; margin: 0 5px; background-color: transparent;">
+        <a class="absolute-a" style="position: relative;" href="#" onclick="changePosition(event, '${obj.name}', '${obj.description}')">
+                <div class="card pointer">
+                    <div class="card-children pointer" style="top: -100%;">
+                        <img src="assets/images/rosequartz.jpg" class="card-img" alt="">
+                        <div class="card-info">
                     <ul class="card-icons" style="justify-content: flex-start !important; gap: 5px;">
                         ${generateLanguageIcons(obj)}
                     </ul>
@@ -68,7 +88,7 @@ function buildCards(obj) {
                     <p><strong>Data de Criação:</strong> ${new Date(obj.created_at).toLocaleDateString()}</p>
 
                     <p style="position: absolute; bottom: -100%; right: 70%;" class="hover">
-                        <span class="btn-d" onclick="goToPage('../html/repositorio.html')"
+                        <span class="btn-d" onclick="goToPage('./assets/html/repositorio.html')"
                             style="width: 1000% !important; font-weight: 400;">
                             Saiba mais
                         </span>
@@ -87,26 +107,6 @@ function buildCards(obj) {
 
     `;
     objects.push(cardHTML); 
-}
-
-function generateLanguageIcons(obj) {
-    const languages = usedLanguages[obj.name.toLowerCase()];
-    if (!languages) return '';
-
-    return Object.keys(languages).map(language => {
-        let l = handleLanguageFormat(language.toLowerCase());
-
-        if (!mainTech.includes(l)) {
-            l = ""
-        }
-        return `<li>
-                    <i class="devicon-${l}-plain colored" style="font-size: 20px;"></i>
-                </li>`;
-    }).join('');
-}
-
-function goToPage(address) {
-    window.open(address, '_blank');
 }
 
 function printCards() {
@@ -134,7 +134,7 @@ function printCards() {
 
         setTimeout(() => {
             cardElement.classList.add('visible');
-        }, 70);
+        }, 10);
     });
 }
 
@@ -180,6 +180,26 @@ function printMainTechs() {
         ulContainer.appendChild(logo);
     });
 
+}
+
+function generateLanguageIcons(obj) {
+    const languages = usedLanguages[obj.name.toLowerCase()];
+    if (!languages) return '';
+
+    return Object.keys(languages).map(language => {
+        let l = handleLanguageFormat(language.toLowerCase());
+
+        if (!mainTech.includes(l)) {
+            l = ""
+        }
+        return `<li>
+                    <i class="devicon-${l}-plain colored" style="font-size: 20px;"></i>
+                </li>`;
+    }).join('');
+}
+
+function goToPage(address) {
+    window.open(address, '_blank');
 }
 
 function handleLanguageFormat(languageCode) {
@@ -235,7 +255,6 @@ async function fetchToken() {
         console.log('Não foi possível acessar i.json', error);
     }
 }
-
 
 async function callApi(address) {
     try {

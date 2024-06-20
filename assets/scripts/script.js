@@ -27,12 +27,7 @@ function returnTrueForMobileWidth() {
     return window.innerWidth <= 800;
 }
 
-function changePosition(event) {
-    event.preventDefault();
-    const cardChildren = event.currentTarget.querySelector('.card-children');
-    cardChildren.style.top = cardChildren.style.top === '0%' ? '-100%' : '0%';
-    cardChildren.classList.add('blockChangePosition');
-}
+
 
 // CHAMADAS DE MÉTODOS AO CARREGAR A PÁGINA
 
