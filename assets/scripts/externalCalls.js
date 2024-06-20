@@ -119,7 +119,6 @@ function setExternalLinks(db) {
     })
 }
 function printMainTechs() {
-    const mainTech = ["html5", "css3", "csharp", "nodejs"]
 
     const ulContainer = document.getElementById('mainTech');
     const avatarImage = document.getElementById('')
@@ -206,6 +205,8 @@ document.addEventListener("DOMContentLoaded", async function () {
     token = await fetchToken();
     const gitData = await callApi(apiGitHubMe);
     const gitDataRepos = await callApi(`${apiGitHubMe}/repos`);
+
+    printMainTechs() // Printa as tecnologias que domina (#Contatos)
 
     if (gitData) {
         setExternalLinks(gitData);
