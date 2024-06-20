@@ -1,0 +1,27 @@
+# Arquivos de configuração ou cache
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Arquivos gerados pela construção do projeto
+dist/
+build/
+*.min.js
+
+# Arquivos de ambiente
+.env
+
+# Arquivos de dependências de front-end
+bower_components/
+
+# Arquivos de backup
+*.bak
+*.swp
+
+# Arquivos específicos de linguagem
+*.html
+*.css
+*.js
+
+# Arquivos JSON
+*.json
