@@ -23,15 +23,8 @@ function setAboutProject(event, nome, descricao) {
     description.textContent = descricao || '';
 }
 
-function changePosition(event, nome, descricao) {
-    event.preventDefault();
-    const cardChildren = event.currentTarget.querySelector('.card-children');
-    cardChildren.style.top = cardChildren.style.top === '0%' ? '-100%' : '0%';
-    cardChildren.classList.add('blockChangePosition');
-
-    setAboutProject(event, nome, descricao);
-    console.log("deu algo")
-}
+//STARD CARDS
+// Constroi, printa, anima os cards
 
 function buildCards(obj) {
 
@@ -150,6 +143,18 @@ function moveRight() {
     printCards();
 }
 
+function changePosition(event, nome, descricao) {
+    event.preventDefault();
+    const cardChildren = event.currentTarget.querySelector('.card-children');
+    cardChildren.style.top = cardChildren.style.top === '0%' ? '-100%' : '0%';
+    cardChildren.classList.add('blockChangePosition');
+
+    setAboutProject(event, nome, descricao);
+    console.log("deu algo")
+}
+//END CARDS
+
+// Atribui a var dinâmicas do html valores
 function setExternalLinks(db) {
     let gitLinks = document.querySelectorAll('.link-github');
     let avatarImages = document.querySelectorAll('.avatar-img')
@@ -166,42 +171,11 @@ function setExternalLinks(db) {
         o.src = gitAvatar;
     })
 }
-function printMainTechs() {
-
-    const ulContainer = document.getElementById('mainTech');
-    const avatarImage = document.getElementById('')
-
-    mainTech.forEach(o => {
-        let logo = document.createElement('i');
-        logo.innerHTML = `
-            <i class="devicon-${o.toLowerCase()}-plain colored"></i>
-
-        `
-        ulContainer.appendChild(logo);
-    });
-
-}
-
-function generateLanguageIcons(obj) {
-    const languages = usedLanguages[obj.name.toLowerCase()];
-    if (!languages) return '';
-
-    return Object.keys(languages).map(language => {
-        let l = handleLanguageFormat(language.toLowerCase());
-
-        if (!mainTech.includes(l)) {
-            l = ""
-        }
-        return `<li>
-                    <i class="devicon-${l}-plain colored" style="font-size: 20px;"></i>
-                </li>`;
-    }).join('');
-}
 
 function goToPage(address) {
     window.open(address, '_blank');
 }
-
+//Linguagem de prog no formato aceito devicons
 function handleLanguageFormat(languageCode) {
     const languages = {
         "c#": "csharp",
@@ -219,7 +193,38 @@ function handleLanguageFormat(languageCode) {
         return languageCode;
     }
 }
+//Gera os ícones de linguagens devicons no card
+function generateLanguageIcons(obj) {
+    const languages = usedLanguages[obj.name.toLowerCase()];
+    if (!languages) return '';
 
+    return Object.keys(languages).map(language => {
+        let l = handleLanguageFormat(language.toLowerCase());
+
+        if (!mainTech.includes(l)) {
+            l = ""
+        }
+        return `<li>
+                    <i class="devicon-${l}-plain colored" style="font-size: 20px;"></i>
+                </li>`;
+    }).join('');
+}
+//Gera os ícones de linguagens devicons na aba contato
+function printMainTechs() {
+
+    const ulContainer = document.getElementById('mainTech');
+    const avatarImage = document.getElementById('')
+
+    mainTech.forEach(o => {
+        let logo = document.createElement('i');
+        logo.innerHTML = `
+            <i class="devicon-${o.toLowerCase()}-plain colored"></i>
+
+        `
+        ulContainer.appendChild(logo);
+    });
+
+}
 function fillLanguagesLinks(obj) {
     languages[obj.name.toLowerCase()] = `https://api.github.com/repos/x99oly/${obj.name.toLowerCase()}/languages`
 }
@@ -246,19 +251,12 @@ async function populateLanguages(obj) {
 
 // Funções assíncronas retornam promessas de dado, 'await' funciona como um 'if(dado){prossiga} / espera o retorno pra atribuir o dado
 
-async function fetchToken() {
-    try {
-        const response = await fetch('config.json');
-        const data = await response.json();
-        return data.gitToken;
-    } catch (error) {
-        console.log('Não foi possível acessar i.json', error);
-    }
-}
 
 async function callApi(address) {
     try {
-        const response = await fetch(address);
+        const response = await fetch(address, {
+           
+        });
         const data = await response.json();
         return data;
     } catch (error) {
@@ -270,12 +268,11 @@ async function callApi(address) {
 // CHAMADAS DE MÉTODOS AO CARREGAR A PÁGINA
 
 document.addEventListener("DOMContentLoaded", async function () {
-    token = await fetchToken();
     const gitData = await callApi(apiGitHubMe);
-    gitAvatar = gitData.avatar_url
-    console.log(gitAvatar)
     const gitDataRepos = await callApi(`${apiGitHubMe}/repos`);
 
+
+    gitAvatar = gitData.avatar_url
     printMainTechs() // Printa as tecnologias que domina (#Contatos)
 
     if (gitData) {
