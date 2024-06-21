@@ -161,9 +161,9 @@ function setExternalLinks(db) {
             ${db.bio} <br>
             <strong>Localização: </strong><span>${db.location}</span> <br>                  
 <strong>site: </strong><a class="git-site hover" href="${db.blog}" target="_blank">${db.blog}</a>
-            <span class="git-followers" href="#" > <br><br>
+            <span class="git-followers" > <br><br>
              <img class="logo" style="background-color: var(--neutro-1);" src="assets/images/logos/pessoas.png" alt="">
-                            ${db.followers}
+               ${db.followers}
              </span>
     `;
     gitLinks.forEach(link => {
@@ -314,7 +314,7 @@ function fillRepoDetails(data) {
     repoDetails.push(repo)
 
 
-    console.log(repo);
+   // console.log(repo);
 }
 
 // campo sobre na aba projetosd
