@@ -21,7 +21,7 @@ bower_components/
 *.swp
 
 # Arquivos específicos de linguagem
-*.html
+
 *.css
 *.js
 

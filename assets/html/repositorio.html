@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css"
+        integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" href="../css/style.css">
+
+    <link rel="stylesheet" type='text/css' href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" />
+
+
+    <style>
+        .ctt {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 0 0%;
+            position: absolute;
+            top: 10%;
+            gap: 20px;
+            margin: -2% 0 5% 0;
+
+        }
+    </style>
+
+    <title>Document</title>
+</head>
+
+<body style="background-color: var(--neutro-2); position: relative; overflow-x: hidden !important;">
+    <header>
+        <nav style=" position: absolute; left: -20%; top: 0%; width: 100%;">
+            <ul style="max-width: 100%; display: flex; flex-direction: row;">
+                <li class="btn-d" style="width: 150% !important; margin: 10px;">
+                    <a href="../../index.html">Início</a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <div class="ctt">
+
+          
+        </div>
+
+    </main>
+
+    <div id="teste" style="width: auto ; height: auto; background-color: rgb(3, 33, 60);">
+        <i class="devicon-visualbasic-plain"></i>
+
+
+        <script>
+            buildRepoContent()
+
+
+            function buildRepoContent() {
+                let ls = JSON.parse(openLS('repo'));
+                console.log(ls)
+                let div = document.querySelector('main'); // Correção: use getElementById em vez de getElementByID
+
+                let content = document.createElement('div');
+                content.classList.add('ctt')
+                content.innerHTML = `
+          <h1 class="repo-name" style="margin-top: 5%; font-size: clamp(20px, 1rem, 30px)">${ls.repoName}</h1>
+
+            <div class="img-cont"
+                style="height: 400px !important; width: 100%; display: grid; place-items: center; overflow: hidden; ">
+                <img class="repo-image" src="../images/rosequartz.jpg" alt="">
+            </div>
+
+            <p class="repo-description" style="text-align: justify; padding: 0 5%;">
+                ${ls.repoDescription}
+            </p>
+
+            <div style="width: 90%; height: auto; justify-content: center; display: flax; flax-wrap: wrap;">
+
+                <ul class="repo-language"
+                    style=" display: flex; flex-direction: row; height: 40px; width: 100%; justify-content: start; list-style: none; gap: 15px; margin-left: 8%;">
+                    <div style="display: flex; flex-direction: row; justify-content: space-around; gap: 20px; width: 100%;">
+                        <img src="/assets/images/logos/about-logo.png"
+                            style="width: 2rem; min-width: 25px; max-width: 44px; height: auto;"> <span
+                            class="repo-topic">${ls.repoTopic}</span> </img>
+                        <img src="/assets/images/logos/repositorio-logo.png"
+                            style="width: 2rem; min-width: 25px; max-width: 44px; height: auto; background-color: white; border-radius: 50%;">
+                        <span class="repo-fork">${ls.repoFork}</span> </img>
+                        <img src="/assets/images/logos/hollywood-star.png"
+                            style="width: 2rem; min-width: 25px; max-width: 44px; height: auto;"> <span
+                            class="repo-star">${ls.repoStar}</span> </img>
+                        <img src="/assets/images/logos/github-mark-white.png"
+                            style="width: 2rem; min-width: 25px; max-width: 44px; height: auto;"> <span
+                            class="repo-data">${formatDate(ls.repoData)}</span> </img>
+                    </div>
+                    <!-- Exemplo de ícone de linguagem -->
+                    <i class="devicon-favicon-plain"></i>
+
+                </ul>
+            </div>
+
+            <a href="#" class="btn-d repo-link" style="margin-bottom: 50px;">Ver no git</a>
+    `;
+
+                div.appendChild(content);
+            }
+
+            function formatDate(dateString) {
+                // Converte a string de data para um objeto Date
+                let date = new Date(dateString);
+                // Verifica se a data é válida
+                if (!isNaN(date.getTime())) {
+                    // Formata a data para o formato desejado (no caso, o formato de localização padrão)
+                    return date.toLocaleDateString();
+                } else {
+                    return "Data inválida"; // Trate casos de data inválida, se necessário
+                }
+            }
+
+
+            function openLS(name) {
+                return localStorage.getItem(name || []);
+                console.log('LS: Lista atribuída com sucesso!')
+            }
+
+
+            const lt = [
+                "javascript",
+                "python",
+                "java",
+                "ruby",
+                "php",
+                "cpp",
+                "csharp",
+                "swift",
+                "go",
+                "typescript",
+                "kotlin",
+                "rust",
+                "perl",
+                "scala",
+                "lua",
+                "haskell",
+                "r",
+                "dart",
+                "shellscript",
+                "html",
+                "css",
+                "sql",
+                "assembly",
+                "objectivec",
+                "visualbasic",
+                "clojure",
+                "fsharp",
+                "groovy",
+                "elixir",
+                "julia",
+                "unity",
+                "docker",
+                "aws",
+                "react",
+                "angular",
+                "vuejs",
+                "nodejs",
+                "expressjs",
+                "mongodb",
+                "firebase",
+                "tensorflow",
+                "pytorch",
+                "spring",
+                "hibernate",
+                "jenkins",
+                "ansible",
+                "git",
+                "linux",
+                "Cplusplus"
+            ];
+
+
+            //devi icon
+            function print() {
+                const container = document.getElementById('teste'); // Seleciona o elemento pai no DOM
+
+                lt.forEach(o => {
+                    let logo = document.createElement('i');
+                    logo.innerHTML = `
+        <i class="devicon-${o.toLowerCase()}-plain colored"></i>
+
+        `
+                    console.log(`for: ${logo}`)
+
+                    container.appendChild(logo); // Adiciona o elemento <i> ao elemento pai no DOM
+                });
+
+                for (i = 0; i < lt.length; i++) {
+                    let logo = document.createElement('i');
+                    logo.innerHTML = `
+        <i class="devicon-${lt[i].toLowerCase()}-plain"></i>
+
+        `
+                    console.log(`for: ${logo}`)
+
+                    container.appendChild(logo);
+                }
+            }
+
+            print();
+
+        </script>
+
+        <!--BOOTSTRAP-->
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.3/dist/umd/popper.min.js"
+            integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+            crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js"
+            integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+            crossorigin="anonymous"></script>
+</body>
+
+</html>
