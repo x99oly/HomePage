@@ -165,14 +165,11 @@ function setExternalLinks(db) {
                             00
              </span>
     `;
-
     gitLinks.forEach(link => {
         link.addEventListener('click', function (event) {
-            event.preventDefault();
-            goToPage(db.html_url);
+            goToPage(event, db.html_url);
         });
     });
-
 
     avatarImages.forEach(o => {
         o.src = gitAvatar;
@@ -181,24 +178,27 @@ function setExternalLinks(db) {
 // Evento: seta os valores para a página repositório
 
 function goToPage(event, address) {
-    event.preventDefault();
-    console.log('Address:', address);
+    if (address === '/assets/html/repositorio.html') {
+        event.preventDefault();
+        console.log('Address:', address);
 
-    let card = event.currentTarget.closest('.card');
-    let child = card.querySelector('h4');
-    let childName = child.getAttribute('name');
+        let card = event.currentTarget.closest('.card');
+        let child = card.querySelector('h4');
+        let childName = child.getAttribute('name');
 
-    if (child) {
-        repoDetails.forEach( o =>{
-            if (o.repoName === childName){
+        if (child) {
+            repoDetails.forEach(o => {
+                if (o.repoName === childName) {
 
-                setRepositorio(o);
-            }
-        })
+                    setRepositorio(o);
+                }
+            })
 
-    } else {
-        console.log('Child with tag h4 not found');
+        } else {
+            console.log('Child with tag h4 not found');
+        } 
     }
+
 
     window.open(address, '_blank');
 }
@@ -212,17 +212,17 @@ function setRepositorio(object) {
 
 // Local Storage (LS)
 
-function openLS(name){
+function openLS(name) {
     return localStorage.getItem(name || []);
-    console.log('LS: Lista atribuída com sucesso!') 
+    console.log('LS: Lista atribuída com sucesso!')
 }
 
-function removeFromLS(key){
+function removeFromLS(key) {
     localStorage.removeItem(key);
     console.log('LS: item removido com sucesso!')
 }
 
-function saveLS(key, value){
+function saveLS(key, value) {
     localStorage.setItem(key, value);
     console.log('LS: item salvo com sucesso!')
 }
@@ -318,6 +318,8 @@ function fillRepoDetails(data) {
 
     console.log(repo);
 }
+
+// campo sobre na aba projetosd
 function setAboutProject(event, nome, descricao) {
     event.preventDefault();
 
