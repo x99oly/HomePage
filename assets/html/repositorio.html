@@ -33,7 +33,7 @@
     <title>Document</title>
 </head>
 
-<body style="background-color: var(--neutro-2); position: relative; overflow-x: hidden !important;">
+<body style="background-color: var(--neutro-0); position: relative; overflow-x: hidden !important;">
     <header>
         <nav style=" position: absolute; left: -20%; top: 0%; width: 100%;">
             <ul style="max-width: 100%; display: flex; flex-direction: row;">
@@ -46,12 +46,12 @@
     <main>
         <div class="ctt">
 
-          
+
         </div>
 
     </main>
 
-    <div id="teste" style="width: auto ; height: auto; background-color: rgb(3, 33, 60);">
+    <div id="teste" style="width: auto ; height: auto; background-color: rgb(178, 209, 237);">
         <i class="devicon-visualbasic-plain"></i>
 
 
@@ -97,26 +97,30 @@
                             class="repo-data">${formatDate(ls.repoData)}</span> </img>
                     </div>
                     <!-- Exemplo de ícone de linguagem -->
-                    <i class="devicon-favicon-plain"></i>
+
+                    <ul style="width: 50%; hegth: 40px; backgroudn-color: black;">
+                        <li>
+                            ${ls.repoLanguage}
+                        </li>
+                    </ul>
 
                 </ul>
             </div>
 
-            <a href="#" class="btn-d repo-link" style="margin-bottom: 50px;">Ver no git</a>
+            <a href="${ls.repoLink}" class="btn-d repo-link" style="margin-bottom: 50px;">Ver no git</a>
     `;
 
                 div.appendChild(content);
             }
 
             function formatDate(dateString) {
-                // Converte a string de data para um objeto Date
                 let date = new Date(dateString);
-                // Verifica se a data é válida
-                if (!isNaN(date.getTime())) {
-                    // Formata a data para o formato desejado (no caso, o formato de localização padrão)
+
+                if (!isNaN(date.getTime())) {// Verifica se a data é válida
+
                     return date.toLocaleDateString();
                 } else {
-                    return "Data inválida"; // Trate casos de data inválida, se necessário
+                    return "Data inválida";
                 }
             }
 
@@ -126,6 +130,31 @@
                 console.log('LS: Lista atribuída com sucesso!')
             }
 
+            function goToPage(event, address) {
+
+                window.open(address, '_blank');
+            }
+
+            function handleLanguageFormat(languageCode) {
+                const languages = {
+                    "c#": "csharp",
+                    "c++": "cplusplus",
+                    "f#": "fsharp",
+                    "vb": "visualbasic",
+                    "Html": "html5",
+                    "Css": "css3",
+                    "": ""
+                };
+
+                if (languages.hasOwnProperty(languageCode)) {
+                    return languages[languageCode];
+                } else {
+                    return languageCode;
+                }
+            }
+
+
+            //  // // // // // // // // // // // DEVIICONS
 
             const lt = [
                 "javascript",
@@ -178,9 +207,6 @@
                 "linux",
                 "Cplusplus"
             ];
-
-
-            //devi icon
             function print() {
                 const container = document.getElementById('teste'); // Seleciona o elemento pai no DOM
 

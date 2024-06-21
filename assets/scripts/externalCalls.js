@@ -27,6 +27,7 @@ function buildCards(obj) {
         return text;
     }
     let name = obj.name;
+
     fillRepoDetails(obj)
 
     let truncatedTitle = truncateText(obj.name, 20);
@@ -162,7 +163,7 @@ function setExternalLinks(db) {
 <strong>site: </strong><a class="git-site hover" href="${db.blog}" target="_blank">${db.blog}</a>
             <span class="git-followers" href="#" > <br><br>
              <img class="logo" style="background-color: var(--neutro-1);" src="assets/images/logos/pessoas.png" alt="">
-                            00
+                            ${db.followers}
              </span>
     `;
     gitLinks.forEach(link => {
@@ -178,8 +179,9 @@ function setExternalLinks(db) {
 // Evento: seta os valores para a página repositório
 
 function goToPage(event, address) {
-    if (address === '/assets/html/repositorio.html') {
-        event.preventDefault();
+    event.preventDefault();
+    window.open(address, '_blank');
+
         console.log('Address:', address);
 
         let card = event.currentTarget.closest('.card');
@@ -197,10 +199,6 @@ function goToPage(event, address) {
         } else {
             console.log('Child with tag h4 not found');
         } 
-    }
-
-
-    window.open(address, '_blank');
 }
 
 function setRepositorio(object) {
@@ -343,14 +341,11 @@ async function callApi(address) {
         console.error('Erro ao buscar dados:', error);
     }
 }
-
-
 // CHAMADAS DE MÉTODOS AO CARREGAR A PÁGINA
 
 document.addEventListener("DOMContentLoaded", async function () {
     const gitData = await callApi(apiGitHubMe);
     const gitDataRepos = await callApi(`${apiGitHubMe}/repos`);
-
 
     gitAvatar = gitData.avatar_url
 
