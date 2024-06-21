@@ -10,18 +10,10 @@ const apiGitHubMe = "https://api.github.com/users/x99oly";
 const mainTech = ["html5", "css3", "csharp", "nodejs", "javascript"]
 const usedLanguages = {}; //linguagens que usei nos projetos
 const languages = {}; // Links dos repostorios/languages
+const repoDetails = [];
 
 let gitAvatar = "";
 
-function setAboutProject(event, nome, descricao) {
-    event.preventDefault();
-    
-    let titulo = document.querySelector('.git-description h4');
-    let description = document.querySelector('.git-description p');
-
-    titulo.textContent = nome;
-    description.textContent = descricao || '';
-}
 
 //STARD CARDS
 // Constroi, printa, anima os cards
@@ -34,6 +26,8 @@ function buildCards(obj) {
         }
         return text;
     }
+    let name = obj.name;
+    fillRepoDetails(obj)
 
     let truncatedTitle = truncateText(obj.name, 20);
     let truncatedDescription = truncateText(obj.description || '', 120);
@@ -48,7 +42,8 @@ function buildCards(obj) {
                     <ul class="card-icons" style="justify-content: flex-start !important; gap: 5px;">
                         ${generateLanguageIcons(obj)}
                     </ul>
-                    <h4>${truncatedTitle}</h4>
+
+                    <h4 name="${name}">${truncatedTitle}</h4>
                     <p class="card-description">
                         ${truncatedDescription}
                     </p>
@@ -81,13 +76,13 @@ function buildCards(obj) {
                     <p><strong>Data de Criação:</strong> ${new Date(obj.created_at).toLocaleDateString()}</p>
 
                     <p style="position: absolute; bottom: -100%; right: 70%;" class="hover">
-                        <span class="btn-d" onclick="goToPage('./assets/html/repositorio.html')"
+                        <span class="btn-d" onclick="goToPage(event, 'assets/html/repositorio.html')"
                             style="width: 1000% !important; font-weight: 400;">
                             Saiba mais
                         </span>
                     </p>
                     <p style="position: absolute; bottom: -100%; right: 25%;" class="hover">
-                        <span class="btn-d" onclick="goToPage('${obj.html_url}')"
+                        <span class="btn-d" onclick="goToPage(event, '${obj.html_url}')"
                             style="width: 1000% !important; font-weight: 400;">
                             On Github
                         </span>
@@ -99,7 +94,7 @@ function buildCards(obj) {
 </div>
 
     `;
-    objects.push(cardHTML); 
+    objects.push(cardHTML);
 }
 
 function printCards() {
@@ -150,7 +145,7 @@ function changePosition(event, nome, descricao) {
     cardChildren.classList.add('blockChangePosition');
 
     setAboutProject(event, nome, descricao);
-    console.log("deu algo")
+    console.log("setAboutProject()s foi chamada no final de chagePosition()")
 }
 //END CARDS
 
@@ -172,9 +167,9 @@ function setExternalLinks(db) {
     `;
 
     gitLinks.forEach(link => {
-        link.addEventListener('click', function(event) {
+        link.addEventListener('click', function (event) {
             event.preventDefault();
-            goToPage(db.html_url); 
+            goToPage(db.html_url);
         });
     });
 
@@ -183,10 +178,55 @@ function setExternalLinks(db) {
         o.src = gitAvatar;
     })
 }
+// Evento: seta os valores para a página repositório
 
-function goToPage(address) {
+function goToPage(event, address) {
+    event.preventDefault();
+    console.log('Address:', address);
+
+    let card = event.currentTarget.closest('.card');
+    let child = card.querySelector('h4');
+    let childName = child.getAttribute('name');
+
+    if (child) {
+        repoDetails.forEach( o =>{
+            if (o.repoName === childName){
+
+                setRepositorio(o);
+            }
+        })
+
+    } else {
+        console.log('Child with tag h4 not found');
+    }
+
     window.open(address, '_blank');
 }
+
+function setRepositorio(object) {
+    let info = JSON.stringify(object);
+    removeFromLS('repo');
+    saveLS('repo', info); // Salva o objeto serializado no localStorage
+    console.log(`Objeto convertido para string com sucesso: ${info}`);
+}
+
+// Local Storage (LS)
+
+function openLS(name){
+    return localStorage.getItem(name || []);
+    console.log('LS: Lista atribuída com sucesso!') 
+}
+
+function removeFromLS(key){
+    localStorage.removeItem(key);
+    console.log('LS: item removido com sucesso!')
+}
+
+function saveLS(key, value){
+    localStorage.setItem(key, value);
+    console.log('LS: item salvo com sucesso!')
+}
+
 //Linguagem de prog no formato aceito devicons
 function handleLanguageFormat(languageCode) {
     const languages = {
@@ -224,8 +264,7 @@ function generateLanguageIcons(obj) {
 //Gera os ícones de linguagens devicons na aba contato
 function printMainTechs() {
 
-    const ulContainer = document.getElementById('mainTech');
-    const avatarImage = document.getElementById('')
+    let ulContainer = document.getElementById('mainTech');
 
     mainTech.forEach(o => {
         let logo = document.createElement('i');
@@ -260,10 +299,38 @@ async function populateLanguages(obj) {
     }
 }
 
+// OUTRAS
+
+function fillRepoDetails(data) {
+    let repo = {
+        repoName: data.name,
+        repoDescription: data.description,
+        repoData: data.updated_at,
+        repoLanguage: data.language,
+        repoLink: data.html_url,
+        repoTopic: data.topics,
+        repoFork: data.forks_count,
+        repoStar: data.stargazers_count,
+        repoImage: ""  // tratar isso depois
+    };
+    repoDetails.push(repo)
+
+
+    console.log(repo);
+}
+function setAboutProject(event, nome, descricao) {
+    event.preventDefault();
+
+    let titulo = document.querySelector('.git-description h4');
+    let description = document.querySelector('.git-description p');
+
+    titulo.textContent = nome;
+    description.textContent = descricao || '';
+}
+
 // APIs
 
 // Funções assíncronas retornam promessas de dado, 'await' funciona como um 'if(dado){prossiga} / espera o retorno pra atribuir o dado
-
 
 async function callApi(address) {
     try {
@@ -284,7 +351,8 @@ document.addEventListener("DOMContentLoaded", async function () {
 
 
     gitAvatar = gitData.avatar_url
-    printMainTechs() // Printa as tecnologias que domina (#Contatos)
+
+    printMainTechs()
 
     if (gitData) {
         setExternalLinks(gitData);
