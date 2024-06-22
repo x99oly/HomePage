@@ -102,9 +102,9 @@ async function getJSOn() {
 
         const repos = data;
         const repoValues = Object.values(repos).map(repo=>{
-            console
-            buildPage('/assets/images/portfolio.webp')
         }) 
+        buildPage('/assets/images/portfolio.webp')
+
 
 
         } catch (error) {
