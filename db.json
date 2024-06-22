@@ -1,0 +1,44 @@
+{
+    "coworkers": [
+        {
+            "nome": "Emili Barbosa Silva",
+            "url": "https://github.com/emillibarbosasilva",
+            "foto": "https://avatars.githubusercontent.com/u/165912317?v=4"
+        },
+        {
+            "nome": "JuliaCmadureira",
+            "url": "https://github.com/JuliaCmadureira",
+            "foto": "https://avatars.githubusercontent.com/u/164779590?v=4"
+        },
+        {
+            "nome": "gabrielmatosgm",
+            "url": "https://github.com/gabrielmatosgm",
+            "foto": "https://avatars.githubusercontent.com/u/165958697?v=4"
+        },
+        {
+            "nome": "Humberto Samora",
+            "url": "https://github.com/humbertosamora",
+            "foto": "https://avatars.githubusercontent.com/u/56659037?v=4"
+        }
+    ],
+    "repos": [
+        {
+            "chess": "/assets/images/chess.png"
+        },
+        {
+            "HomePage": "/assets/images/portfolio.webp"
+        },
+        {
+            "Excecos_Contabancaria": "/assets/images/banco.webp"
+        },
+        {
+            "JSONServer": "/assets/images/breakfast food-bro.png"
+        },
+        {
+            "icei-pucminas-psg-si-n-tiaw-2024-1-grupo-1-reserva-de-lanches": "/assets/images/lanche.webp"
+        },
+        {
+            "MyHomePage": "/assets/images/portfolio.webp"
+        }
+    ]
+}

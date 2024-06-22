@@ -1,0 +1,159 @@
+@font-face {
+    font-family: 'Roboto-normal';
+    src: url(/assets/fontes/Roboto-Black.ttf) format('truetype');
+}
+
+:root {
+    --main: #5e0202;
+    --main-ligth: #7e0303;
+    --green: #027353;
+    --blue: #085A8C;
+    --yellow: #EDA624;
+
+    --neutro-0: #000;
+    --neutro-1: #fff;
+    --neutro-2: #070606;
+}
+
+/* RESETS */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    z-index: 1;
+}
+
+
+
+body{
+    z-index: 0;
+    position: relative;
+    width: 100vw;
+    min-height: 100vh;
+    overflow-x: hidden;
+    background-color: var(--neutro-2);
+    color: var(--neutro-1);
+    font-family: "Ubuntu", sans-serif;
+    font-weight: 100;
+}
+header{
+    width: 100%;
+    position: fixed;
+    display:flex;
+    flex-direction: row;
+    gap: 1%;
+    justify-content: center;
+    top: 2%;
+    z-index: 10;
+}
+
+main{
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+h1{
+    font-family: 'Roboto-normal';
+}
+
+.container{
+    
+    width: 100%;
+    height: auto;
+    min-height: 300px;
+    display: grid;
+    place-items: center;
+    grid-template-columns: 1fr 1fr;
+
+    .content{
+        margin-top: 10%;
+        gap: 20px;
+        width: 100%;
+        height: 100%;
+        min-height: 300px;
+        max-height: 700px;
+        overflow: hidden;
+        padding: 5%;
+        display: grid;
+        place-items: center;
+    }
+
+    #c0{
+    }
+    #c1{
+    }
+}
+.tecnologias{
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    
+    .logo{
+        width: 24px;
+    }
+
+    #forks{
+        background-color: var(--neutro-1);
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+    }
+}
+
+#repoinfo{
+    flex-direction: column;
+}
+
+ul, ol {
+    list-style: none;
+    padding: 0;       
+    margin: 0;        
+}
+
+
+
+i{
+    font-size: 24px;
+}
+
+
+img{
+    width: 100%;
+    height: auto;
+}
+
+button{
+    border: none;
+}
+.btn {
+    width: 30%; 
+    max-width: 120px;
+    height: 40px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--main);
+    color: var(--neutro-0);
+    font-size: .9rem;
+    font-weight: 500;
+    box-shadow: 5px 5px 5px var(--neutro-0);
+    transition: all 0.3s ease;
+}
+
+.btn:hover {
+    cursor: pointer;
+    box-shadow: 5px 5px 15px var(--neutro-0);
+    background-color: var(--main-ligth);
+    font-weight: 400;
+}
+
+@media (max-width: 600px) {
+    .container {
+        grid-template-columns: 1fr;
+    }
+}

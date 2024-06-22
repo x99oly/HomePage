@@ -22,8 +22,4 @@ bower_components/
 
 # Arquivos específicos de linguagem
 
-*.css
-*.js
-
 # Arquivos JSON
-*.json
