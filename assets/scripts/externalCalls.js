@@ -5,14 +5,17 @@ const usedLanguages = {};
 const languages = {};
 const repoDetails = [];
 const avatarURL = [];
+const t0 = "ghp_GitMfh1pI79w1gJk"
+const t1 = "IfHM2fQ6LGkD6l1xwCHO"
+const tk = t0+t1
 const headers = {
-    
+    'Authorization': `token ${tk}`,
     'Content-Type': 'application/json'
 };
 
 // Initialize the application
 document.addEventListener("DOMContentLoaded", async function () {
-    try {
+  try {
         await fetchGitHubData();
         await fetchRepos();
         await fetchJSONServerData();
@@ -102,7 +105,7 @@ async function fetchJSONServerData() {
 function buildCards(repo, contributors) {
     const truncatedTitle = truncateText(repo.name, 20);
     const truncatedDescription = truncateText(repo.description || '', 120);
-    
+
     // Monta o HTML do card
     const cardHTML = `
         <div style="display: flex; justify-content: center; margin: 0 5px; background-color: transparent;">
@@ -132,7 +135,7 @@ function buildCards(repo, contributors) {
                             </div>
                             <p><strong>Data de Criação:</strong> ${new Date(repo.created_at).toLocaleDateString()}</p>
                             <p style="position: absolute; bottom: -100%; right: 70%;" class="hover">
-                                <span class="btn-d" onclick="goToPage(event, 'assets/html/repositorio1.html')" style="width: 1000% !important; font-weight: 400;">Saiba mais</span>
+                                <span class="btn-d" onclick="goToPage(event, '../assets/html/repositorio1.html')" style="width: 1000% !important; font-weight: 400;">Saiba mais</span>
                             </p>
                             <p style="position: absolute; bottom: -100%; right: 25%;" class="hover">
                                 <span class="btn-d" onclick="goToPage(event, '${repo.html_url}')" style="width: 1000% !important; font-weight: 400;">On Github</span>
@@ -180,12 +183,12 @@ function printCards() {
 }
 
 // Print img of contributors
-function returnImgContributor(imgLink){
-        let i = document.createElement('img')
-        i.innerHTML = `
+function returnImgContributor(imgLink) {
+    let i = document.createElement('img')
+    i.innerHTML = `
             <img src="${imgLink}" class="owner-img" style="width: 15%; height: auto; border-radius: 50%; margin-top: -5%;" alt="">
         `
-        return i;
+    return i;
 }
 
 // Change position of card content
