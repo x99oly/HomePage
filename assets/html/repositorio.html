@@ -9,49 +9,67 @@
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css"
         integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-    <link rel="stylesheet" href="../css/style.css">
+
+    <link rel="stylesheet" href="../css/repo.css">
 
     <link rel="stylesheet" type='text/css' href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" />
-
 
     <title>Document</title>
 </head>
 
 <body style="background-color: var(--neutro-0); position: relative; overflow-x: hidden !important;">
     <header>
-        <nav style=" position: absolute; left: -20%; top: 0%; width: 100%;">
-            <ul style="max-width: 100%; display: flex; flex-direction: row;">
-                <li class="btn-d" style="width: 150% !important; margin: 10px;">
-                    <a href="../../index.html">Início</a>
-                </li>
-            </ul>
+        <nav>
+            <a class="btn-d " href="#">Início</a>
+            <a class="btn-d " href="https://www.exemplo.com" target="_blank">Link Externo</a>
         </nav>
     </header>
+
     <main>
-        <div class="ctt">
-
-
-        </div>
+        <h1>Título Principal</h1>
+        <img src="../images/jeremy-perkins-uhjiu8FjnsQ-unsplash.jpg" alt="Descrição da imagem">
+        <p>Texto descritivo que acompanha a imagem.</p>
+        <ul>
+            <li>
+                <img src="/assets/images/logos/about-logo.png" width="24" height="24" alt="Logo">
+                <span class="repo-topic">${ls.repoTopic}</span>
+            </li>
+            <li style="background-color: white; width: 24px; height: 30px; border-radius: 50%;">
+                <img src="/assets/images/logos/repositorio-logo.png" width="24" height="24" alt="Logo">
+                <span class="repo-fork">${ls.repoFork}</span>
+            </li>
+            <li>
+                <img src="/assets/images/logos/hollywood-star.png" width="24" height="24" alt="Logo">
+                <span class="repo-star">${ls.repoStar}</span>
+            </li>
+            <li>
+                <img src="/assets/images/logos/github-mark-white.png" width="24" height="24" alt="Logo">
+                <span class="repo-data">${formatDate(ls.repoData)}</span>
+            </li>
+        </ul>
 
     </main>
 
-    <div id="teste" style="width: auto ; height: auto; background-color: rgb(178, 209, 237);">
+
+    <!--  
+        <div id="teste" style="width: auto ; height: auto; background-color: rgb(178, 209, 237);">
         <i class="devicon-visualbasic-plain"></i>
+    -->
 
 
-        <script>
-            buildRepoContent()
+    <script>
+        //buildRepoContent()
 
 
-            function buildRepoContent() {
-                let ls = JSON.parse(openLS('repo'));
-                console.log(ls)
-                let div = document.querySelector('main'); // Correção: use getElementById em vez de getElementByID
+        function buildRepoContent() {
+            let ls = JSON.parse(openLS('repo'));
+            console.log(ls)
+            let div = document.querySelector('main'); // Correção: use getElementById em vez de getElementByID
 
-                let content = document.createElement('div');
-                content.classList.add('ctt')
-                content.innerHTML = `
-          <h1 class="repo-name" style="margin-top: 5%; font-size: clamp(20px, 1rem, 30px)">${ls.repoName}</h1>
+            let content = document.createElement('div');
+            content.classList.add('ctt')
+            content.innerHTML = `
+          <h1 class="repo-name" style="margin-top: 10%; font-size: clamp(20px, 1rem, 30px)">${ls.repoName}</h1>
 
             <div class="img-cont"
                 style="height: 400px !important; width: 100%; display: grid; place-items: center; overflow: hidden; ">
@@ -62,40 +80,48 @@
                 ${ls.repoDescription}
             </p>
 
-            <div style="width: 90%; height: auto; justify-content: center; display: flax; flax-wrap: wrap;">
+            <div style="width: 90%; height: auto; justify-content: center; display: flex; flex-wrap: wrap;">
 
                 <ul class="repo-language"
-                    style=" display: flex; flex-direction: row; height: 40px; width: 100%; justify-content: start; list-style: none; gap: 15px; margin-left: 8%;">
+                    style=" display: flex; flex-direction: row; height: 30px; width: 100%; justify-content: start; list-style: none; gap: 0px; margin-left: 8%;">
                     <div style="display: flex; flex-direction: row; justify-content: space-around; gap: 20px; width: 100%;">
                         <img src="/assets/images/logos/about-logo.png"
-                            style="width: 2rem; min-width: 25px; max-width: 44px; height: auto;"> <span
+                            style="width: 2rem; min-width: 25px; max-width: 24px; height: auto;"> <span
                             class="repo-topic">${ls.repoTopic}</span> </img>
                         <img src="/assets/images/logos/repositorio-logo.png"
-                            style="width: 2rem; min-width: 25px; max-width: 44px; height: auto; background-color: white; border-radius: 50%;">
+                            style="width: 2rem; min-width: 25px; max-width: 24px; height: auto; background-color: white; border-radius: 50%;">
                         <span class="repo-fork">${ls.repoFork}</span> </img>
                         <img src="/assets/images/logos/hollywood-star.png"
-                            style="width: 2rem; min-width: 25px; max-width: 44px; height: auto;"> <span
+                            style="width: 2rem; min-width: 25px; max-width: 24px; height: auto;"> <span
                             class="repo-star">${ls.repoStar}</span> </img>
                         <img src="/assets/images/logos/github-mark-white.png"
-                            style="width: 2rem; min-width: 25px; max-width: 44px; height: auto;"> <span
+                            style="width: 2rem; min-width: 25px; max-width: 24px; height: auto;"> <span
                             class="repo-data">${formatDate(ls.repoData)}</span> </img>
                     </div>
                     <!-- Exemplo de ícone de linguagem -->
 
                     <ul style="width: 50%; hegth: 40px; backgroudn-color: black;">
                         <li>
-                            ${ls.repoLanguage}
+                            <p><br><br>${ls.repoLanguage}
                         </li>
                     </ul>
 
                 </ul>
             </div>
 
-            <a href="${ls.repoLink}" class="btn-d repo-link" style="margin-bottom: 50px;">Ver no git</a>
-    `;
+            
 
-                div.appendChild(content);
-            }
+            <nav style=" position: absolute; left: -20%; top: 80%; width: 100%;">
+            <ul style="max-width: 100%; position:absolute; display: flex; flex-direction: row;">
+                <li class="btn-d" style="width: 150% !important; margin: 10px;">
+                    <a href="../../index.html">Início</a>
+                </li>
+                <li class="btn-d" style="width: 150% !important; margin: 10px;>
+                    <a  onClick="goToPage(event, ${ls.repoLink})"  class=" repo-link" >Ver no git</a>
+                </li>
+            </ul>
+        </nav>
+    `;}
 
             function formatDate(dateString) {
                 let date = new Date(dateString);
@@ -115,6 +141,7 @@
             }
 
             function goToPage(event, address) {
+                console.log('entrou')
 
                 window.open(address, '_blank');
             }
@@ -140,97 +167,22 @@
 
             //  // // // // // // // // // // // DEVIICONS
 
-            const lt = [
-                "javascript",
-                "python",
-                "java",
-                "ruby",
-                "php",
-                "cpp",
-                "csharp",
-                "swift",
-                "go",
-                "typescript",
-                "kotlin",
-                "rust",
-                "perl",
-                "scala",
-                "lua",
-                "haskell",
-                "r",
-                "dart",
-                "shellscript",
-                "html",
-                "css",
-                "sql",
-                "assembly",
-                "objectivec",
-                "visualbasic",
-                "clojure",
-                "fsharp",
-                "groovy",
-                "elixir",
-                "julia",
-                "unity",
-                "docker",
-                "aws",
-                "react",
-                "angular",
-                "vuejs",
-                "nodejs",
-                "expressjs",
-                "mongodb",
-                "firebase",
-                "tensorflow",
-                "pytorch",
-                "spring",
-                "hibernate",
-                "jenkins",
-                "ansible",
-                "git",
-                "linux",
-                "Cplusplus"
-            ];
-            function print() {
-                const container = document.getElementById('teste'); // Seleciona o elemento pai no DOM
+        
 
-                lt.forEach(o => {
-                    let logo = document.createElement('i');
-                    logo.innerHTML = `
-        <i class="devicon-${o.toLowerCase()}-plain colored"></i>
+   
 
-        `
-                    console.log(`for: ${logo}`)
+    </script>
 
-                    container.appendChild(logo); // Adiciona o elemento <i> ao elemento pai no DOM
-                });
-
-                for (i = 0; i < lt.length; i++) {
-                    let logo = document.createElement('i');
-                    logo.innerHTML = `
-        <i class="devicon-${lt[i].toLowerCase()}-plain"></i>
-
-        `
-                    console.log(`for: ${logo}`)
-
-                    container.appendChild(logo);
-                }
-            }
-
-            print();
-
-        </script>
-
-        <!--BOOTSTRAP-->
-        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-            crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.3/dist/umd/popper.min.js"
-            integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
-            crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js"
-            integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
-            crossorigin="anonymous"></script>
+    <!--BOOTSTRAP-->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.3/dist/umd/popper.min.js"
+        integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js"
+        integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+        crossorigin="anonymous"></script>
 </body>
 
 </html>

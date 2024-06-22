@@ -6,6 +6,7 @@ const languages = {};
 const repoDetails = [];
 const avatarURL = [];
 
+const token = ""; // APAGA ANTES DO PUSH
 const headers = "";
 
 // Initialize the application
@@ -81,7 +82,6 @@ async function fetchReposContributors(repoName) {
     }
 }
 
-
 // Fetch data from JSON Server
 async function fetchJSONServerData() {
     try {
@@ -153,7 +153,6 @@ function generateContributorImages(contributors) {
             alt="">
     `).join('');
 }
-
 
 // Print cards to the DOM 
 function printCards() {
