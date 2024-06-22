@@ -5,9 +5,10 @@ const usedLanguages = {};
 const languages = {};
 const repoDetails = [];
 const avatarURL = [];
-
-const token = ""; // APAGA ANTES DO PUSH
-const headers = "";
+const headers = {
+    
+    'Content-Type': 'application/json'
+};
 
 // Initialize the application
 document.addEventListener("DOMContentLoaded", async function () {
@@ -82,6 +83,7 @@ async function fetchReposContributors(repoName) {
     }
 }
 
+
 // Fetch data from JSON Server
 async function fetchJSONServerData() {
     try {
@@ -100,7 +102,7 @@ async function fetchJSONServerData() {
 function buildCards(repo, contributors) {
     const truncatedTitle = truncateText(repo.name, 20);
     const truncatedDescription = truncateText(repo.description || '', 120);
-
+    
     // Monta o HTML do card
     const cardHTML = `
         <div style="display: flex; justify-content: center; margin: 0 5px; background-color: transparent;">
@@ -119,7 +121,9 @@ function buildCards(repo, contributors) {
                                     <h6 style="color: var(--main);">Colaboradores</h6>
                                 </li>
                                 <li id="liID" class="git-coworkers">
-                                    ${generateContributorImages(contributors)}
+                                    <img src="./assets/images/me-perfil.jpg" class="owner-img"
+                                        style="width: 15%; height: auto; border-radius: 50%; margin-top: -5%;"
+                                        alt="">
                                 </li>
                             </ul>
                             <div style="display: flex; flex-direction: row; align-items: center; gap: 20px">
@@ -153,6 +157,7 @@ function generateContributorImages(contributors) {
             alt="">
     `).join('');
 }
+
 
 // Print cards to the DOM 
 function printCards() {

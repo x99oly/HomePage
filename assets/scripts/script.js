@@ -1,3 +1,5 @@
+
+
 // Variáveis globais
 const intervalDuration = 5000;
 // CHAMADAS DE MÉTODOS AO CARREGAR A PÁGINA
