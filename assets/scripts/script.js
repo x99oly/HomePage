@@ -3,9 +3,6 @@
 // Variáveis globais
 const intervalDuration = 5000;
 
-
-
-
 function returnPagesID(){
     const pagesID = [];
 

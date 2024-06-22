@@ -1,130 +1,197 @@
-// solveds
 const objects = [];
 let vat = '0%';
-// TOKEN GIT HUB X99OLY --- Var de ambiente
-// novos
-const apiGitHub = "https://api.github.com/users/";
-const apiGitHubMe = "https://api.github.com/users/x99oly";
-
-// Garantir que só tenha linguagens usadas por mim e não por alguma parte do programa usado
-const mainTech = ["html5", "css3", "csharp", "nodejs", "javascript"]
-const usedLanguages = {}; //linguagens que usei nos projetos
-const languages = {}; // Links dos repostorios/languages
+const mainTech = ["html5", "css3", "csharp", "nodejs", "javascript"];
+const usedLanguages = {};
+const languages = {};
 const repoDetails = [];
+const avatarURL = [];
 
-let gitAvatar = "";
+const headers = "";
 
-
-//STARD CARDS
-// Constroi, printa, anima os cards
-
-function buildCards(obj) {
-
-    function truncateText(text, maxLength) {
-        if (text.length > maxLength) {
-            return text.slice(0, maxLength) + '...';
-        }
-        return text;
+// Initialize the application
+document.addEventListener("DOMContentLoaded", async function () {
+    try {
+        await fetchGitHubData();
+        await fetchRepos();
+        await fetchJSONServerData();
+        printMainTechs();
+    } catch (error) {
+        console.error(`Initialization failed: ${error}`);
     }
-    let name = obj.name;
+});
 
-    fillRepoDetails(obj)
+// Fetch data from GitHub API
+async function fetchGitHubData() {
+    const apiGitHubMe = "https://api.github.com/users/x99oly";
 
-    let truncatedTitle = truncateText(obj.name, 20);
-    let truncatedDescription = truncateText(obj.description || '', 120);
+    try {
+        const response = await fetch(apiGitHubMe, { headers });
+        if (!response.ok) throw new Error(`Failed to fetch GitHub data. Error: ${response.statusText}`);
 
-    let cardHTML = `
+        const data = await response.json();
+        setExternalLinks(data);
+        gitAvatar = data.avatar_url;
+
+    } catch (error) {
+        console.error(`fetchGitHubData failed: ${error}`);
+    }
+}
+
+// Fetch repositories from GitHub API
+async function fetchRepos() {
+    const apiGitHubMe = "https://api.github.com/users/x99oly";
+
+    try {
+        const response = await fetch(`${apiGitHubMe}/repos`, { headers });
+        if (!response.ok) throw new Error(`Failed to fetch repositories. Error: ${response.statusText}`);
+
+        const data = await response.json();
+        for (let repo of data) {
+            await populateLanguages(repo);
+            fillRepoDetails(repo);
+
+            // Obtém os dados dos colaboradores
+            const { repoName, contributors } = await fetchReposContributors(repo.name);
+
+            // Constrói o card passando os dados do repositório e dos colaboradores
+            buildCards(repo, contributors);
+        }
+
+        printCards(); // Após construir todos os cards, imprime na interface
+    } catch (error) {
+        console.error(`fetchRepos failed: ${error}`);
+    }
+}
+
+// Fetch contributors of repositories from GitHub API
+async function fetchReposContributors(repoName) {
+    const address = `https://api.github.com/repos/x99oly/${repoName}/collaborators`;
+
+    try {
+        const response = await fetch(address, { headers });
+        if (!response.ok) throw new Error(`Failed to fetch contributors. Error: ${response.statusText}`);
+
+        const data = await response.json();
+
+        // Retorna um objeto contendo o nome do repositório e os dados dos colaboradores
+        return { repoName, contributors: data };
+    } catch (error) {
+        console.error(`fetchReposContributors failed: ${error}`);
+        return { repoName, contributors: [] }; // Retorna array vazio em caso de erro
+    }
+}
+
+
+// Fetch data from JSON Server
+async function fetchJSONServerData() {
+    try {
+        const response = await fetch('http://localhost:3000/coworkers/');
+        if (!response.ok) throw new Error(`Failed to fetch JSON Server data. Error: ${response.statusText}`);
+
+        const data = await response.json();
+        avatarURL.push(...data.map(item => item.url));
+    } catch (error) {
+        console.error(`fetchJSONServerData failed: ${error}`);
+    }
+}
+
+// Build cards for repositories 
+
+function buildCards(repo, contributors) {
+    const truncatedTitle = truncateText(repo.name, 20);
+    const truncatedDescription = truncateText(repo.description || '', 120);
+
+    // Monta o HTML do card
+    const cardHTML = `
         <div style="display: flex; justify-content: center; margin: 0 5px; background-color: transparent;">
-        <a class="absolute-a" style="position: relative;" href="#" onclick="changePosition(event, '${obj.name}', '${obj.description}')">
+            <a class="absolute-a" style="position: relative;" href="#" onclick="changePosition(event, '${repo.name}', '${repo.description}')">
                 <div class="card pointer">
                     <div class="card-children pointer" style="top: -100%;">
                         <img src="assets/images/rosequartz.jpg" class="card-img" alt="">
                         <div class="card-info">
-                    <ul class="card-icons" style="justify-content: flex-start !important; gap: 5px;">
-                        ${generateLanguageIcons(obj)}
-                    </ul>
-
-                    <h4 name="${name}">${truncatedTitle}</h4>
-                    <p class="card-description">
-                        ${truncatedDescription}
-                    </p>
-                    <ul class="card-collaborators" style="display: flex; flex-direction: column;">
-                        <li style="gap: 0px !important;">
-                            <h6 style="color: var(--main);">Colaboradores</h6>
-                        </li>
-                        <li>
-                            <img src="${gitAvatar}" class="owner-img"
-                                style="width: 15%; height: auto; border-radius: 50%; margin-top: -5%;"
-                                alt="">
-                        </li>
-                    </ul>
-
-                    <div style="display: flex; flex-direction: row; align-items: center; gap: 20px">
-                        <p>
-                            <img class="logo"
-                                style="max-width: 20px; background-color: var(--neutro-1); border-radius: 50%;"
-                                src="assets/images/logos/repositorio-logo.png" alt="">
-                            ${obj.forks_count}
-                        </p>
-                        <p>
-                            <img class="logo"
-                                style="max-width: 20px; background-color: var(--neutro-1); border-radius: 50%;"
-                                src="assets/images/logos/hollywood-star.png" alt="">
-                            ${obj.stargazers_count}
-                        </p>
+                            <ul class="card-icons" style="justify-content: flex-start !important; gap: 5px;">
+                                ${generateLanguageIcons(repo)}
+                            </ul>
+                            <h4 name="${repo.name}">${truncatedTitle}</h4>
+                            <p class="card-description">${truncatedDescription}</p>
+                            <ul class="card-collaborators" style="display: flex; flex-direction: column;">
+                                <li style="gap: 0px !important;">
+                                    <h6 style="color: var(--main);">Colaboradores</h6>
+                                </li>
+                                <li id="liID" class="git-coworkers">
+                                    ${generateContributorImages(contributors)}
+                                </li>
+                            </ul>
+                            <div style="display: flex; flex-direction: row; align-items: center; gap: 20px">
+                                <p><img class="logo" style="max-width: 20px; background-color: var(--neutro-1); border-radius: 50%;" src="assets/images/logos/repositorio-logo.png" alt="">${repo.forks_count}</p>
+                                <p><img class="logo" style="max-width: 20px; background-color: var(--neutro-1); border-radius: 50%;" src="assets/images/logos/hollywood-star.png" alt="">${repo.stargazers_count}</p>
+                            </div>
+                            <p><strong>Data de Criação:</strong> ${new Date(repo.created_at).toLocaleDateString()}</p>
+                            <p style="position: absolute; bottom: -100%; right: 70%;" class="hover">
+                                <span class="btn-d" onclick="goToPage(event, 'assets/html/repositorio.html')" style="width: 1000% !important; font-weight: 400;">Saiba mais</span>
+                            </p>
+                            <p style="position: absolute; bottom: -100%; right: 25%;" class="hover">
+                                <span class="btn-d" onclick="goToPage(event, '${repo.html_url}')" style="width: 1000% !important; font-weight: 400;">On Github</span>
+                            </p>
+                        </div>
                     </div>
-
-                    <p><strong>Data de Criação:</strong> ${new Date(obj.created_at).toLocaleDateString()}</p>
-
-                    <p style="position: absolute; bottom: -100%; right: 70%;" class="hover">
-                        <span class="btn-d" onclick="goToPage(event, 'assets/html/repositorio.html')"
-                            style="width: 1000% !important; font-weight: 400;">
-                            Saiba mais
-                        </span>
-                    </p>
-                    <p style="position: absolute; bottom: -100%; right: 25%;" class="hover">
-                        <span class="btn-d" onclick="goToPage(event, '${obj.html_url}')"
-                            style="width: 1000% !important; font-weight: 400;">
-                            On Github
-                        </span>
-                    </p>
                 </div>
-            </div>
+            </a>
         </div>
-    </a>
-</div>
-
     `;
+
     objects.push(cardHTML);
 }
 
+// Função para gerar as imagens dos colaboradores
+function generateContributorImages(contributors) {
+    if (!contributors || contributors.length === 0) return '';
+
+    return contributors.map(contributor => `
+        <img src="${contributor.avatar_url}" class="owner-img"
+            style="width: 15%; height: auto; border-radius: 50%; margin-top: -5%;"
+            alt="">
+    `).join('');
+}
+
+
+// Print cards to the DOM 
 function printCards() {
     const container = document.getElementById('right');
     container.innerHTML = '';
 
-    objects.forEach((cardHTML) => {
+    objects.forEach(cardHTML => {
         const tempDiv = document.createElement('div');
         tempDiv.innerHTML = cardHTML.trim();
         const cardElement = tempDiv.firstChild;
-
-        // Adiciona a classe de fade-in
         cardElement.classList.add('fade-in');
 
         const cardChildren = cardElement.querySelector('.card-children');
-        if (vat === '0%') {
-            cardChildren.style.top = vat;
-            vat = '-100%';
-        } else {
-            cardChildren.style.top = vat;
-            vat = '0%';
-        }
+        cardChildren.style.top = vat;
+        vat = vat === '0%' ? '-100%' : '0%';
 
         container.appendChild(cardElement);
-
-        setTimeout(() => {
-            cardElement.classList.add('visible');
-        }, 10);
+        setTimeout(() => cardElement.classList.add('visible'), 10);
     });
+}
+
+// Print img of contributors
+function returnImgContributor(imgLink){
+        let i = document.createElement('img')
+        i.innerHTML = `
+            <img src="${imgLink}" class="owner-img" style="width: 15%; height: auto; border-radius: 50%; margin-top: -5%;" alt="">
+        `
+        return i;
+}
+
+// Change position of card content
+function changePosition(event, name, description) {
+    event.preventDefault();
+    const cardChildren = event.currentTarget.querySelector('.card-children');
+    cardChildren.style.top = cardChildren.style.top === '0%' ? '-100%' : '0%';
+    cardChildren.classList.add('blockChangePosition');
+
+    setAboutProject(name, description);
 }
 
 function moveLeft() {
@@ -139,166 +206,49 @@ function moveRight() {
     printCards();
 }
 
-function changePosition(event, nome, descricao) {
-    event.preventDefault();
-    const cardChildren = event.currentTarget.querySelector('.card-children');
-    cardChildren.style.top = cardChildren.style.top === '0%' ? '-100%' : '0%';
-    cardChildren.classList.add('blockChangePosition');
-
-    setAboutProject(event, nome, descricao);
-    console.log("setAboutProject()s foi chamada no final de chagePosition()")
-}
-//END CARDS
-
-// Atribui a var dinâmicas do html valores
-function setExternalLinks(db) {
-    let gitLinks = document.querySelectorAll('.link-github');
-    let avatarImages = document.querySelectorAll('.avatar-img');
-
-    let gitMain = document.querySelector('.git-about-me');
+// Set external links and user information
+function setExternalLinks(data) {
+    const gitMain = document.querySelector('.git-about-me');
     gitMain.innerHTML = `
-        <span class="git-name">Olá, me chamo ${db.name},</span>
-            ${db.bio} <br>
-            <strong>Localização: </strong><span>${db.location}</span> <br>                  
-<strong>site: </strong><a class="git-site hover" href="${db.blog}" target="_blank">${db.blog}</a>
-            <span class="git-followers" > <br><br>
-             <img class="logo" style="background-color: var(--neutro-1);" src="assets/images/logos/pessoas.png" alt="">
-               ${db.followers}
-             </span>
+        <span class="git-name">Olá, me chamo ${data.name},</span>
+        ${data.bio} <br>
+        <strong>Localização: </strong><span>${data.location}</span> <br>
+        <strong>Site: </strong><a class="git-site hover" href="${data.blog}" target="_blank">${data.blog}</a>
+        <span class="git-followers"><br><br>
+            <img class="logo" style="background-color: var(--neutro-1);" src="assets/images/logos/pessoas.png" alt="">
+            ${data.followers}
+        </span>
     `;
-    gitLinks.forEach(link => {
-        link.addEventListener('click', function (event) {
-            goToPage(event, db.html_url);
-        });
+    document.querySelectorAll('.link-github').forEach(link => {
+        link.addEventListener('click', event => goToPage(event, data.html_url));
     });
-
-    avatarImages.forEach(o => {
-        o.src = gitAvatar;
-    })
+    document.querySelectorAll('.avatar-img').forEach(img => {
+        img.src = data.avatar_url;
+    });
 }
-// Evento: seta os valores para a página repositório
 
+// Navigate to a specific page
 function goToPage(event, address) {
     event.preventDefault();
     window.open(address, '_blank');
 
-        console.log('Address:', address);
+    const card = event.currentTarget.closest('.card');
+    const child = card.querySelector('h4');
+    const childName = child.getAttribute('name');
 
-        let card = event.currentTarget.closest('.card');
-        let child = card.querySelector('h4');
-        let childName = child.getAttribute('name');
-
-        if (child) {
-            repoDetails.forEach(o => {
-                if (o.repoName === childName) {
-
-                    setRepositorio(o);
-                }
-            })
-
-        } else {
-            console.log('Child with tag h4 not found');
-        } 
-}
-
-function setRepositorio(object) {
-    let info = JSON.stringify(object);
-    removeFromLS('repo');
-    saveLS('repo', info); // Salva o objeto serializado no localStorage
-    console.log(`Objeto convertido para string com sucesso: ${info}`);
-}
-
-// Local Storage (LS)
-
-function openLS(name) {
-    return localStorage.getItem(name || []);
-    console.log('LS: Lista atribuída com sucesso!')
-}
-
-function removeFromLS(key) {
-    localStorage.removeItem(key);
-    console.log('LS: item removido com sucesso!')
-}
-
-function saveLS(key, value) {
-    localStorage.setItem(key, value);
-    console.log('LS: item salvo com sucesso!')
-}
-
-//Linguagem de prog no formato aceito devicons
-function handleLanguageFormat(languageCode) {
-    const languages = {
-        "c#": "csharp",
-        "c++": "cplusplus",
-        "f#": "fsharp",
-        "vb": "visualbasic",
-        "Html": "html5",
-        "Css": "css3",
-        "": ""
-    };
-
-    if (languages.hasOwnProperty(languageCode)) {
-        return languages[languageCode];
-    } else {
-        return languageCode;
-    }
-}
-//Gera os ícones de linguagens devicons no card
-function generateLanguageIcons(obj) {
-    const languages = usedLanguages[obj.name.toLowerCase()];
-    if (!languages) return '';
-
-    return Object.keys(languages).map(language => {
-        let l = handleLanguageFormat(language.toLowerCase());
-
-        if (!mainTech.includes(l)) {
-            l = ""
-        }
-        return `<li>
-                    <i class="devicon-${l}-plain colored" style="font-size: 20px;"></i>
-                </li>`;
-    }).join('');
-}
-//Gera os ícones de linguagens devicons na aba contato
-function printMainTechs() {
-
-    let ulContainer = document.getElementById('mainTech');
-
-    mainTech.forEach(o => {
-        let logo = document.createElement('i');
-        logo.innerHTML = `
-            <i class="devicon-${o.toLowerCase()}-plain colored"></i>
-
-        `
-        ulContainer.appendChild(logo);
+    repoDetails.forEach(repo => {
+        if (repo.repoName === childName) setRepositorio(repo);
     });
-
-}
-//preenche o objeto lenguages com links para aba linguagens de cada repositório
-function fillLanguagesLinks(obj) {
-    languages[obj.name.toLowerCase()] = `https://api.github.com/repos/x99oly/${obj.name.toLowerCase()}/languages`
 }
 
-async function populateLanguages(obj) {
-    fillLanguagesLinks(obj);
-    const url = languages[obj.name.toLowerCase()];
-    try {
-        const response = await callApi(url); // Faz a chamada real à API do GitHub para obter as linguagens do repositório
-        const formattedLanguages = {};
-
-        Object.keys(response).forEach(language => {
-            const formattedLanguage = handleLanguageFormat(language);
-            formattedLanguages[formattedLanguage] = response[language];
-        });
-
-        usedLanguages[obj.name.toLowerCase()] = formattedLanguages;
-    } catch (error) {
-        console.error(`Erro ao buscar linguagens para ${obj.name}:`, error);
-    }
+// Set repository details in local storage
+function setRepositorio(repo) {
+    const info = JSON.stringify(repo);
+    localStorage.setItem('repo', info);
+    //console.log(`Objeto convertido para string com sucesso: ${info}`);
 }
 
-// OUTRAS
-
+// fill repository details
 function fillRepoDetails(data) {
     let repo = {
         repoName: data.name,
@@ -311,65 +261,86 @@ function fillRepoDetails(data) {
         repoStar: data.stargazers_count,
         repoImage: ""  // tratar isso depois
     };
-    repoDetails.push(repo)
+    repoDetails.push(repo);
 
-
-   // console.log(repo);
+    // console.log(repo);
 }
 
-// campo sobre na aba projetosd
-function setAboutProject(event, nome, descricao) {
-    event.preventDefault();
-
-    let titulo = document.querySelector('.git-description h4');
-    let description = document.querySelector('.git-description p');
-
-    titulo.textContent = nome;
-    description.textContent = descricao || '';
-}
-
-// APIs
-
-// Funções assíncronas retornam promessas de dado, 'await' funciona como um 'if(dado){prossiga} / espera o retorno pra atribuir o dado
-
-async function callApi(address) {
+// Populate languages used in a repository
+async function populateLanguages(repo) {
+    const url = `https://api.github.com/repos/x99oly/${repo.name.toLowerCase()}/languages`;
     try {
-        const response = await fetch(address);
+        const response = await fetch(url, { headers: { 'Authorization': `token ${token}` } });
+        if (!response.ok) throw new Error(`Failed to fetch languages for ${repo.name}. Error: ${response.statusText}`);
+
         const data = await response.json();
-        return data;
+        const formattedLanguages = {};
+        for (let [language, value] of Object.entries(data)) {
+            const formattedLanguage = handleLanguageFormat(language);
+            formattedLanguages[formattedLanguage] = value;
+        }
+        usedLanguages[repo.name.toLowerCase()] = formattedLanguages;
     } catch (error) {
-        console.error('Erro ao buscar dados:', error);
+        console.error(`populateLanguages failed for ${repo.name}: ${error}`);
     }
 }
-// CHAMADAS DE MÉTODOS AO CARREGAR A PÁGINA
 
-document.addEventListener("DOMContentLoaded", async function () {
-    const gitData = await callApi(apiGitHubMe);
-    const gitDataRepos = await callApi(`${apiGitHubMe}/repos`);
+// Handle language format for DevIcons
+function handleLanguageFormat(languageCode) {
+    const languages = {
+        "c#": "csharp",
+        "c++": "cplusplus",
+        "f#": "fsharp",
+        "vb": "visualbasic",
+        "html": "html5",
+        "css": "css3",
+        "": ""
+    };
+    return languages[languageCode.toLowerCase()] || languageCode;
+}
 
-    gitAvatar = gitData.avatar_url
+// Generate language icons for cards
+function generateLanguageIcons(repo) {
+    const languages = usedLanguages[repo.name.toLowerCase()];
+    if (!languages) return '';
 
-    printMainTechs()
+    return Object.keys(languages).map(language => {
+        const lang = handleLanguageFormat(language);
+        return mainTech.includes(lang) ? `<li><i class="devicon-${lang}-plain colored" style="font-size: 20px;"></i></li>` : '';
+    }).join('');
+}
 
-    if (gitData) {
-        setExternalLinks(gitData);
+// Print main technologies
+function printMainTechs() {
+    const ulContainer = document.getElementById('mainTech');
+    mainTech.forEach(tech => {
+        const logo = document.createElement('i');
+        logo.innerHTML = `<i class="devicon-${tech}-plain colored"></i>`;
+        ulContainer.appendChild(logo);
+    });
+}
+
+// Set project details in the "about project" section
+function setAboutProject(name, description) {
+    const title = document.querySelector('.git-description h4');
+    const desc = document.querySelector('.git-description p');
+    title.textContent = name;
+    desc.textContent = description || '';
+}
+
+// Helper to truncate text
+function truncateText(text, maxLength) {
+    return text.length > maxLength ? text.slice(0, maxLength) + '...' : text;
+}
+
+// Fetch JSON data
+async function getJSOn(data) {
+    if (data) {
+        data.forEach(item => avatarURL.push(item.url));
+        console.log(avatarURL);
     }
-    if (gitDataRepos) {
-        // Utilizando for...of para poder usar await dentro do loop
-        for (let o of gitDataRepos) {
-            fillLanguagesLinks(o);
-            await populateLanguages(o);
-            buildCards(o, gitData);
-        }
+}
 
-        printCards();
-    }
-});
-
-
-// CHAMADAS DE MÉTODOS AO REDIMENSIONAR A JANELA
-
-window.addEventListener("resize", function () {
-});
-
-
+function imgJSON(link) {
+    return `<img src="${link}" class="owner-img" style="width: 15%; height: auto; border-radius: 50%; margin-top: -5%;" alt="">`;
+}
