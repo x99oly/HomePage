@@ -5,9 +5,21 @@ const usedLanguages = {};
 const languages = {};
 const repoDetails = [];
 const avatarURL = [];
+
+const imgssRepos = {
+    "Excecos_Contabancaria": "../assets/images/banco.jpg",
+    "Chess": "../assets/images/chess.jpg",
+    "icei-pucminas-psg-si-n-tiaw-2024-1-grupo-1-reserva-de-lanches": "../assets/images/lanche.jpg",
+    "Ludo": "../assets/images/ludo.jpg",
+    "HomePage": "../assets/images/portifolio.jpg",
+    "MyHomePage": "../assets/images/portifolio.jpg",
+    "server": "../assets/images/server.jpg",
+    "JSONServer": "../assets/images/server.jpg"
+}
+
 const t0 = "ghp_GitMfh1pI79w1gJk"
 const t1 = "IfHM2fQ6LGkD6l1xwCHO"
-const token = t0+t1
+const token = t0 + t1
 const headers = {
     'Authorization': `token ${token}`,
     'Content-Type': 'application/json'
@@ -16,7 +28,7 @@ const headers = {
 // Initialize the application
 document.addEventListener("DOMContentLoaded", async function () {
     console.log(token)
-  try {
+    try {
         await fetchGitHubData();
         await fetchRepos();
         await fetchJSONServerData();
@@ -107,13 +119,15 @@ function buildCards(repo, contributors) {
     const truncatedTitle = truncateText(repo.name, 20);
     const truncatedDescription = truncateText(repo.description || '', 120);
 
+    const imageSrc = imgssRepos[repo.name]
+
     // Monta o HTML do card
     const cardHTML = `
         <div style="display: flex; justify-content: center; margin: 0 5px; background-color: transparent;">
             <a class="absolute-a" style="position: relative;" href="#" onclick="changePosition(event, '${repo.name}', '${repo.description}')">
                 <div class="card pointer">
                     <div class="card-children pointer" style="top: -100%;">
-                        <img src="assets/images/rosequartz.jpg" class="card-img" alt="">
+                        <img src="${imageSrc}" class="card-img" alt="">
                         <div class="card-info">
                             <ul class="card-icons" style="justify-content: flex-start !important; gap: 5px;">
                                 ${generateLanguageIcons(repo)}
@@ -267,7 +281,7 @@ function fillRepoDetails(data) {
         repoTopic: data.topics,
         repoFork: data.forks_count,
         repoStar: data.stargazers_count,
-        repoImage: ""  // tratar isso depois
+        repoImage: imgsRepos
     };
     repoDetails.push(repo);
 

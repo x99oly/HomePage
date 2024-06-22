@@ -1,4 +1,13 @@
-
+const imgsRepos = {
+    "Excecos_Contabancaria": "../images/banco.jpg",
+    "Chess": "../images/chess.jpg",
+    "icei-pucminas-psg-si-n-tiaw-2024-1-grupo-1-reserva-de-lanches": "../images/lanche.jpg",
+    "Ludo": "../images/ludo.jpg",
+    "HomePage": "../images/portifolio.jpg",
+    "MyHomePage": "../images/portifolio.jpg",
+    "server": "../images/server.jpg",
+    "JSONServer": "../images/server.jpg"
+}
 
 // Variáveis globais
 const intervalDuration = 5000;
@@ -40,7 +49,7 @@ function buildPage(link) {
         month: '2-digit',
         day: '2-digit'
     });
-
+    let imgSrc = imgsRepos[ls.repoName]
     const content = `
         <header class="notON">
         <button class="btn" onclick="goToPage(event, '../../index.html' )">
@@ -55,7 +64,7 @@ function buildPage(link) {
         <div class="container notON">
 
             <div id="c0" class="content">
-                <img src="${link}" alt="">
+                <img src="${imgsRepos[ls.repoName]}" alt="">
             </div>
 
             <div id="c1" class="content">
