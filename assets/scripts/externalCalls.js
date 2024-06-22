@@ -128,7 +128,7 @@ function buildCards(repo, contributors) {
                             </div>
                             <p><strong>Data de Criação:</strong> ${new Date(repo.created_at).toLocaleDateString()}</p>
                             <p style="position: absolute; bottom: -100%; right: 70%;" class="hover">
-                                <span class="btn-d" onclick="goToPage(event, 'assets/html/repositorio.html')" style="width: 1000% !important; font-weight: 400;">Saiba mais</span>
+                                <span class="btn-d" onclick="goToPage(event, 'assets/html/repositorio1.html')" style="width: 1000% !important; font-weight: 400;">Saiba mais</span>
                             </p>
                             <p style="position: absolute; bottom: -100%; right: 25%;" class="hover">
                                 <span class="btn-d" onclick="goToPage(event, '${repo.html_url}')" style="width: 1000% !important; font-weight: 400;">On Github</span>
@@ -332,14 +332,4 @@ function truncateText(text, maxLength) {
     return text.length > maxLength ? text.slice(0, maxLength) + '...' : text;
 }
 
-// Fetch JSON data
-async function getJSOn(data) {
-    if (data) {
-        data.forEach(item => avatarURL.push(item.url));
-        console.log(avatarURL);
-    }
-}
 
-function imgJSON(link) {
-    return `<img src="${link}" class="owner-img" style="width: 15%; height: auto; border-radius: 50%; margin-top: -5%;" alt="">`;
-}

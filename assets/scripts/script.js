@@ -1,14 +1,11 @@
 // Variáveis globais
 const intervalDuration = 5000;
-let ls = []
-
 // CHAMADAS DE MÉTODOS AO CARREGAR A PÁGINA
 
 document.addEventListener("DOMContentLoaded", function () {
-    if(!page1MobileGridLayout()){
+    if (!page1MobileGridLayout()) {
         console.log('index out')
-        getLS('repo')
-        buildPage()
+        getJSOn()
     }
     returnPagesID();
 });
@@ -16,16 +13,16 @@ document.addEventListener("DOMContentLoaded", function () {
 // CHAMADAS DE MÉTODOS AO REDIMENSIONAR A JANELA
 
 window.addEventListener("resize", function () {
-    if(!page1MobileGridLayout()){
+    if (!page1MobileGridLayout()) {
         console.log('index out')
     };
 });
 //repositorios
-function getLS(key){
-    if(item = localStorage.getItem(key)){
+function getLS(key) {
+    if (item = localStorage.getItem(key)) {
         ls = JSON.parse(item);
         console.log(ls)
-    }else{
+    } else {
         console.log('falhou')
     }
 }
@@ -35,7 +32,7 @@ function goToPage(event, address) {
     window.open(address, '_blank');
 }
 
-function buildPage(){
+function buildPage(link) {
     const formattedDate = new Date(ls.repoData).toLocaleDateString('pt-BR', {
         year: 'numeric',
         month: '2-digit',
@@ -43,7 +40,7 @@ function buildPage(){
     });
 
     const content = `
-        <header>
+        <header class="notON">
         <button class="btn" onclick="goToPage(event, '../../index.html' )">
             Inicio
         </button>
@@ -53,10 +50,10 @@ function buildPage(){
     </header>
     <main>
 
-        <div class="container">
+        <div class="container notON">
 
             <div id="c0" class="content">
-                <img src="https://fazcapital.com.br/wp-content/uploads/2024/01/Como-o-banco-ganha-dinheiro.webp" alt="">
+                <img src="${link}" alt="">
             </div>
 
             <div id="c1" class="content">
@@ -82,51 +79,81 @@ function buildPage(){
 
     </main>
     `
-
     document.body.insertAdjacentHTML('beforeend', content)
-    
-}
+};
 
+// Função assíncrona para buscar dados JSON
+async function getJSOn() {
+    try {
+        const response = await fetch('http://localhost:3000/repos');
 
-//index
-
-function returnPagesID(){
-    const pagesID = [];
-
-    let pages = document.querySelectorAll('.pages');
-
-    pages.forEach(page => {
-        let id = page.id;
-        pagesID.push(id);
-    })
-    //alert(pagesID); main,projetos,contato,blog
-}
-
-function page1MobileGridLayout() {
-    let content = ``;
-    if(content = document.getElementById('content-page1')){
-        content.style.gridTemplateColumns = returnTrueForMobileWidth() ? 'repeat(1, 100%)' : 'repeat(2, 50%)';
-    }
-}
-
-function returnTrueForMobileWidth() {
-    return window.innerWidth <= 800;
-}
-
-// CHAMADAS DE MÉTODOS POR INTERVALO DE TEMPO
-
-setInterval(() => {
-    const cards = document.querySelectorAll('#right .card-children');
-    cards.forEach(cardChildren => {
-        cardChildren.classList.remove('blockChangePosition');
-    });
-}, intervalDuration * 3);
-
-setInterval(() => {
-    const cards = document.querySelectorAll('#right .card-children');
-    cards.forEach(cardChildren => {
-        if (!cardChildren.classList.contains('blockChangePosition')) {
-            cardChildren.style.top = cardChildren.style.top === '0%' ? '-100%' : '0%';
+        if (!response.ok) {
+            throw new Error('Erro ao buscar dados: ' + response.statusText);
         }
-    });
-}, intervalDuration);
+        const data = await response.json();
+
+        let ls = []
+        if(getLS('repo')){
+
+            console.log('ls')
+        }
+
+        const repos = data;
+        const repoValues = Object.values(repos).map(repo=>{
+            console
+            buildPage('/assets/images/portfolio.webp')
+        }) 
+
+
+        } catch (error) {
+            console.error(`Falha na requisição: ${error}`);
+        }
+    }
+
+function imgJSON(link) {
+        return `<img src="${link}" class="owner-img" style="width: 15%; height: auto; border-radius: 50%; margin-top: -5%;" alt="">`;
+    }
+
+
+    //index
+
+    function returnPagesID() {
+        const pagesID = [];
+
+        let pages = document.querySelectorAll('.pages');
+
+        pages.forEach(page => {
+            let id = page.id;
+            pagesID.push(id);
+        })
+        //alert(pagesID); main,projetos,contato,blog
+    }
+
+    function page1MobileGridLayout() {
+        let content = ``;
+        if (content = document.getElementById('content-page1')) {
+            content.style.gridTemplateColumns = returnTrueForMobileWidth() ? 'repeat(1, 100%)' : 'repeat(2, 50%)';
+        }
+    }
+
+    function returnTrueForMobileWidth() {
+        return window.innerWidth <= 800;
+    }
+
+    // CHAMADAS DE MÉTODOS POR INTERVALO DE TEMPO
+
+    setInterval(() => {
+        const cards = document.querySelectorAll('#right .card-children');
+        cards.forEach(cardChildren => {
+            cardChildren.classList.remove('blockChangePosition');
+        });
+    }, intervalDuration * 3);
+
+    setInterval(() => {
+        const cards = document.querySelectorAll('#right .card-children');
+        cards.forEach(cardChildren => {
+            if (!cardChildren.classList.contains('blockChangePosition')) {
+                cardChildren.style.top = cardChildren.style.top === '0%' ? '-100%' : '0%';
+            }
+        });
+    }, intervalDuration);
