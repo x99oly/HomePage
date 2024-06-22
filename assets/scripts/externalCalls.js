@@ -7,14 +7,15 @@ const repoDetails = [];
 const avatarURL = [];
 const t0 = "ghp_GitMfh1pI79w1gJk"
 const t1 = "IfHM2fQ6LGkD6l1xwCHO"
-const tk = t0+t1
+const token = t0+t1
 const headers = {
-    'Authorization': `token ${tk}`,
+    'Authorization': `token ${token}`,
     'Content-Type': 'application/json'
 };
 
 // Initialize the application
 document.addEventListener("DOMContentLoaded", async function () {
+    console.log(token)
   try {
         await fetchGitHubData();
         await fetchRepos();
